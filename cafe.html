@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Demo Café – Menu</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#f6efe4;--surface:#fffaf2;--ink:#2a1d16;--muted:#7a6a5e;--accent:#b8481f;--on-accent:#fff;--line:#e3d6c4;
+--d:'Fraunces',Georgia,serif;--b:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1410;--surface:#281d17;--ink:#f5ece0;--muted:#b3a08f;--accent:#e2713f;--on-accent:#1c1410;--line:#3b2c23}}
+:root[data-theme="dark"]{--bg:#1c1410;--surface:#281d17;--ink:#f5ece0;--muted:#b3a08f;--accent:#e2713f;--on-accent:#1c1410;--line:#3b2c23}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 var(--b);padding-bottom:90px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:640px;margin:0 auto;padding:0 18px}
+.top{position:relative;overflow:hidden;margin-top:18px;padding:34px 22px 28px;border-radius:18px;color:#fff4e3;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72'%3E%3Cg fill='%23ffffff' fill-opacity='.07'%3E%3Cellipse cx='18' cy='20' rx='9' ry='13' transform='rotate(35 18 20)'/%3E%3Cellipse cx='52' cy='52' rx='9' ry='13' transform='rotate(-30 52 52)'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(135deg,#2e1b11,#6a3d22)}
+.top small{color:#f0b88d;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:12px}
+.top h1{font:800 clamp(44px,12vw,68px)/.95 var(--d);margin:6px 0 8px;color:#fff4e3;max-width:75%}
+.top p{margin:0;color:#e9d6c0;max-width:70%}
+.cup{position:absolute;right:12px;bottom:10px;width:110px}
+.tbl{display:inline-block;background:#fff4e3;color:#2a1d16;padding:3px 12px;border-radius:99px;font-weight:700;font-size:14px;margin-left:8px}
+.ctrl{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:12px 0 10px;border-bottom:1px solid var(--line)}
+.ctrl input[type=search]{width:100%;font:inherit;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.row{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.tabs{display:flex;gap:8px;overflow-x:auto;flex:1;padding-bottom:2px;scrollbar-width:none}
+.tab{white-space:nowrap;padding:7px 15px;border:1px solid var(--line);border-radius:99px;background:var(--surface)}
+.tab[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.vt{display:flex;gap:8px}.vb{display:flex;align-items:center;padding:6px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:14px}.vb .dot{margin-right:6px}.vb[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700}
+h2{font:800 28px var(--d);margin:26px 0 4px}
+.it{display:flex;justify-content:space-between;gap:14px;padding:15px 0;border-bottom:1px solid var(--line);align-items:center}
+.it b{font-weight:700}
+.it p{margin:2px 0 4px;color:var(--muted);font-size:14.5px}
+.pr{font-weight:700}
+.dot{display:inline-block;width:14px;height:14px;border:2px solid;border-radius:3px;margin-right:8px;vertical-align:-1px;position:relative}
+.dot::after{content:"";position:absolute;inset:2px;border-radius:50%;background:currentColor}
+.dot.v{color:#2e9e4f}.dot.n{color:#c0392b}
+.add,.st{min-width:84px}
+.add{padding:8px 16px;border:2px solid var(--accent);color:var(--accent);background:none;border-radius:8px;font-weight:700}
+.st{display:flex;align-items:center;justify-content:space-between;background:var(--accent);color:var(--on-accent);border-radius:8px;font-weight:700}
+.st button{background:none;border:0;color:inherit;font-size:20px;width:32px;height:36px}
+.none{color:var(--muted);padding:30px 0;text-align:center}
+#bar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));width:min(604px,calc(100% - 28px));display:flex;justify-content:space-between;padding:15px 20px;background:var(--accent);color:var(--on-accent);border:0;border-radius:14px;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:9}
+#sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+#sheet[hidden]{display:none}
+.card{background:var(--bg);width:min(640px,100%);max-height:85%;overflow:auto;border-radius:18px 18px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px))}
+.card h3{font:800 26px var(--d);margin:0 0 6px;display:flex;justify-content:space-between}
+.card h3 button{background:none;border:0;font-size:28px;line-height:1}
+.ln{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.tot{display:flex;justify-content:space-between;font-weight:700;font-size:20px;padding:14px 0}
+.note{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--muted);font-size:14.5px}
+.rb{display:block;width:100%;margin:0 0 10px;padding:13px;border:2px solid var(--ink);border-radius:12px;background:none;font-weight:700}
+.rcpt{background:var(--surface);border:1px dashed var(--muted);border-radius:10px;padding:16px;margin-bottom:14px}.rm{color:var(--muted);font-size:14.5px;margin:8px 0}
+@media print{body>*:not(#sheet){display:none!important}#sheet{position:static;background:none;display:block}.card{max-height:none}.rb,.wa,.rcpt h3 button{display:none}}
+.qrw{text-align:center;margin-bottom:10px}.qr{display:inline-block;background:#fff;padding:10px;border-radius:10px}.qrw p{margin:8px 0 0;color:var(--muted);font-size:14.5px}
+.pay{padding:4px 0 12px}.pay b{display:block;margin-bottom:8px}.po{display:flex;gap:8px;margin-bottom:10px}.gp{display:block;text-align:center;background:#1a73e8;color:#fff;font-weight:700;padding:13px;border-radius:12px;text-decoration:none;margin-bottom:10px}
+.wa{display:block;text-align:center;background:#1fa855;color:#fff;font-weight:700;padding:14px;border-radius:12px;text-decoration:none;margin:4px 0 12px}
+footer{padding:28px 0;color:var(--muted);font-size:14px;text-align:center}
+</style>
+</head>
+<body>
+<main class="wrap">
+<div class="top">
+<svg class="cup" viewBox="0 0 120 110" aria-hidden="true"><path d="M40 8c-6 8 6 12 0 22M60 4c-7 9 7 14 0 26M80 8c-6 8 6 12 0 22" fill="none" stroke="#f5dfc4" stroke-width="3" stroke-linecap="round" opacity=".6"/><ellipse cx="58" cy="102" rx="50" ry="6" fill="#000" opacity=".25"/><path d="M22 44h72v22a30 30 0 0 1-30 30H52a30 30 0 0 1-30-30z" fill="#fff4e3"/><path d="M94 52h8a12 12 0 0 1 0 24h-10" fill="none" stroke="#fff4e3" stroke-width="6"/><ellipse cx="58" cy="44" rx="36" ry="7" fill="#b8481f"/></svg>
+<small>Kalwa, Thane</small>
+<h1>Demo Café<span id="tb"></span></h1>
+<p>Fresh coffee, snacks and desserts. Open daily 8am–11pm.</p>
+</div>
+<div class="ctrl">
+<input type="search" id="q" placeholder="Search the menu" aria-label="Search the menu">
+<div class="row"><div class="tabs" id="tabs"></div><div class="vt" id="vf"></div></div>
+</div>
+<div id="menu"></div>
+<footer>Prices include taxes</footer>
+</main>
+<button id="bar" hidden></button>
+<div id="sheet" hidden><div class="card" role="dialog" aria-modal="true" aria-label="Your order"></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const M=[
+["Coffee","Cappuccino","Espresso with steamed milk foam",120,1],
+["Coffee","Classic Cold Coffee","Blended with ice cream",130,1],
+["Coffee","Chocolate Cold Coffee","Cold coffee with chocolate syrup",150,1],
+["Coffee","Hazelnut Cold Coffee","Nutty and creamy",160,1],
+["Coffee","Caramel Cold Coffee","Sweet caramel swirl",160,1],
+["Coffee","Iced Americano","Strong black coffee over ice",110,1],
+["Coffee","Hot Latte","Smooth, milky and mild",125,1],
+["Tea","Masala Chai","Strong, with ginger and spices",40,1],
+["Tea","Lemon Iced Tea","Chilled and refreshing",90,1],
+["Snacks","Veg Grilled Sandwich","Veggies and cheese, toasted",110,1],
+["Snacks","Paneer Wrap","Spiced paneer, onion, mint chutney",140,1],
+["Snacks","Chicken Sandwich","Grilled chicken, mayo, lettuce",160,0],
+["Snacks","Peri Peri Fries","Crisp fries with a dip",100,1],
+["Snacks","Masala Maggi","Café style, with veggies",90,1],
+["Snacks","Salted Fries","Classic crispy fries",80,1],
+["Snacks","Cheesy Fries","Fries loaded with cheese sauce",130,1],
+["Snacks","Egg Sandwich","Boiled egg, mayo, toasted bread",100,0],
+["Snacks","Chicken Popcorn","Crispy bites with a dip",150,0],
+["Burgers","Veg Burger","Aloo tikki, lettuce, sauce",99,1],
+["Burgers","Cheese Veg Burger","Veg patty with a cheese slice",129,1],
+["Burgers","Chicken Burger","Crispy chicken, mayo, lettuce",149,0],
+["Burgers","Double Chicken Cheese Burger","Two patties with melted cheese",189,0],
+["Pizza","Margherita Pizza","Tomato sauce and mozzarella",199,1],
+["Pizza","Veg Supreme Pizza","Onion, capsicum, corn, olives",249,1],
+["Pizza","Paneer Tikka Pizza","Spiced paneer and onion",269,1],
+["Pizza","Chicken Tikka Pizza","Tandoori chicken and capsicum",289,0],
+["Pizza","Chicken Sausage Pizza","Sausage, cheese and jalapeños",299,0],
+["Cold","Virgin Mojito","Mint, lime and soda",110,1],
+["Cold","Oreo Shake","Thick and chocolatey",150,1],
+["Cold","Coca-Cola","Chilled, 300 ml",50,1],
+["Cold","Mineral Water","500 ml bottle",20,1],
+["Cold","Mineral Water","1 litre bottle",30,1],
+["Dessert","Chocolate Brownie","Warm and fudgy",110,1],
+["Dessert","Belgian Waffle","With chocolate sauce",130,1]];
+const $=s=>document.querySelector(s),cats=["All",...new Set(M.map(m=>m[0]))];
+let cat="All",veg="all",q="",cart={},pay="counter",rc=false,ono=0;
+const WA="",UPI="",CAFE="Demo Café"; // café WhatsApp number with country code, e.g. 919876543210
+const tm=/^#t(\d{1,3})$/.exec(location.hash);
+if(tm)$("#tb").innerHTML='<span class="tbl">Table '+tm[1]+'</span>';
+const tot=()=>{let n=0,t=0;for(const i in cart){n+=cart[i];t+=cart[i]*M[i][3]}return[n,t]};
+function render(){
+$("#tabs").innerHTML=cats.map(c=>`<button class="tab" aria-pressed="${c===cat}" data-c="${c}">${c}</button>`).join("");
+$("#vf").innerHTML=[["all","All"],["veg","Veg"],["non","Non-veg"]].map(([k,l])=>`<button class="vb" aria-pressed="${k===veg}" data-f="${k}">${k==="all"?"":'<span class="dot '+(k==="veg"?"v":"n")+'"></span>'}${l}</button>`).join("");
+let h="",last="";
+M.forEach((m,i)=>{
+if((cat!=="All"&&m[0]!==cat)||(veg==="veg"&&!m[4])||(veg==="non"&&m[4])||!(m[1]+m[2]).toLowerCase().includes(q))return;
+if(cat==="All"&&m[0]!==last){h+=`<h2>${m[0]}</h2>`;last=m[0]}
+const n=cart[i]||0;
+h+=`<div class="it"><div><span class="dot ${m[4]?"v":"n"}" role="img" aria-label="${m[4]?"Veg":"Non-veg"}"></span><b>${m[1]}</b><p>${m[2]}</p><span class="pr">₹${m[3]}</span></div>`+
+(n?`<div class="st"><button data-i="${i}" data-a="-1" aria-label="Remove one">−</button><span>${n}</span><button data-i="${i}" data-a="1" aria-label="Add one">+</button></div>`:`<button class="add" data-i="${i}" data-a="1">Add</button>`)+`</div>`});
+$("#menu").innerHTML=h||'<p class="none">No items found.</p>';
+const[n,t]=tot(),b=$("#bar");b.hidden=!n;
+b.innerHTML=`<span>${n} item${n>1?"s":""} · ₹${t}</span><span>View order →</span>`;
+if(!n)$("#sheet").hidden=true;
+if(!$("#sheet").hidden)sheet()}
+function receipt(t){
+const dt=new Date().toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"}),pm=pay==="upi"?"GPay / UPI":"Pay at counter",ks=Object.keys(cart);
+const txt=encodeURIComponent(CAFE+" - Receipt #"+ono+"\n"+dt+(tm?" | Table "+tm[1]:"")+"\n"+ks.map(i=>cart[i]+" x "+M[i][1]+" - ₹"+cart[i]*M[i][3]).join("\n")+"\nTotal: ₹"+t+"\nPayment: "+pm+"\nThank you!");
+$("#sheet .card").innerHTML=`<div class="rcpt"><h3>Receipt<button data-x="1" aria-label="Close">×</button></h3><p class="rm"><b>${CAFE}</b><br>Kalwa, Thane<br>${dt}${tm?" · Table "+tm[1]:""}<br>Order #${ono}</p>`+ks.map(i=>`<div class="ln"><span>${cart[i]} × ${M[i][1]}</span><span>₹${cart[i]*M[i][3]}</span></div>`).join("")+`<div class="tot"><span>Total</span><span>₹${t}</span></div><p class="rm">Payment: ${pm}<br>Thank you, visit again!</p></div><a class="wa" href="https://wa.me/?text=${txt}" target="_blank" rel="noopener">Share receipt on WhatsApp</a><button class="rb" data-pr="1">Print / Save as PDF</button><button class="rb" data-b="1">← Back to order</button>`}
+function sheet(){
+const[n,t]=tot();
+const msg=encodeURIComponent("New order"+(tm?" - Table "+tm[1]:"")+"\n"+Object.keys(cart).map(i=>cart[i]+" x "+M[i][1]).join("\n")+"\nTotal: ₹"+t+"\nPayment: "+(pay==="upi"?"GPay / UPI":"Pay at counter"));
+if(rc){receipt(t);return}
+$("#sheet .card").innerHTML=`<h3>Your order<button data-x="1" aria-label="Close">×</button></h3>`+
+Object.keys(cart).map(i=>`<div class="ln"><span>${M[i][1]}</span><span>${cart[i]} × ₹${M[i][3]}</span></div>`).join("")+
+`<div class="tot"><span>Total</span><span>₹${t}</span></div><div class="pay"><b>How do you want to pay?</b><div class="po"><button class="vb" aria-pressed="${pay==="counter"}" data-p="counter">Pay at counter</button><button class="vb" aria-pressed="${pay==="upi"}" data-p="upi">GPay / UPI</button></div>${pay==="upi"?'<div class="qrw"><div id="qr" class="qr"></div><p>Scan with GPay, PhonePe or any UPI app to pay ₹'+t+'.</p></div>'+(UPI?`<a class="gp" href="upi://pay?pa=${encodeURIComponent(UPI)}&pn=Demo%20Caf%C3%A9&am=${t}&cu=INR">Pay ₹${t} with GPay</a>`:''):'<div class="note">Pay the bill at the counter after your order.</div>'}</div><a class="wa" href="https://wa.me/${WA}?text=${msg}" target="_blank" rel="noopener">Send order on WhatsApp</a><div class="note">Tap the button to send your order to the café on WhatsApp${tm?" (Table "+tm[1]+")":""}. The café will confirm it with you.</div><button class="rb" data-r="1">Get receipt</button>`;
+if(pay==="upi"&&typeof QRCode!=="undefined"&&$("#qr"))new QRCode($("#qr"),{text:UPI?"upi://pay?pa="+encodeURIComponent(UPI)+"&pn=Demo%20Caf%C3%A9&am="+t+"&cu=INR":"Payment QR",width:180,height:180})}
+document.addEventListener("click",e=>{
+const b=e.target.closest("button,#bar");if(!b)return;
+if(b.dataset.r){rc=true;ono=1000+Math.floor(Math.random()*9000);sheet()}
+else if(b.dataset.b){rc=false;sheet()}
+else if(b.dataset.pr)window.print()
+else if(b.dataset.p){pay=b.dataset.p;sheet()}
+else if(b.dataset.f){veg=b.dataset.f;render()}
+else if(b.dataset.c){cat=b.dataset.c;render()}
+else if(b.dataset.a){const i=b.dataset.i;cart[i]=(cart[i]||0)+ +b.dataset.a;if(cart[i]<=0)delete cart[i];render()}
+else if(b.id==="bar"){rc=false;sheet();$("#sheet").hidden=false}
+else if(b.dataset.x){rc=false;$("#sheet").hidden=true}});
+$("#sheet").addEventListener("click",e=>{if(e.target.id==="sheet")e.target.hidden=true});
+$("#q").oninput=e=>{q=e.target.value.toLowerCase().trim();render()};
+render();
+</script>
+</body>
+</html>
